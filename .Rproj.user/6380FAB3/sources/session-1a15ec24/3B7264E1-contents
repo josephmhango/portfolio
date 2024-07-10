@@ -1,0 +1,281 @@
+---
+title: "Dairy Production"
+format:
+  dashboard:
+    orientation: columns
+    nav-buttons: [github]
+github: https://github.com/WilliamBanda/Data-Dashboards-User-Perception
+theme: [Minty, theme/custom.scss]
+fig-width: 4
+fig-asp: 0.9
+params:
+  month:
+  year:
+  threshold_diff: 0.01
+editor_options:
+  chunk_output_type: console
+server: shiny
+---
+
+```{r}
+#| label: setup
+#| include: false
+#| message: false
+#| warning: false
+
+# Install packages and set repository
+install.packages("shiny")
+options(repos = "https://cran.rstudio.com")
+
+# Load required libraries
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(openxlsx)
+  library(readxl)
+  library(readr)
+  library(dplyr)
+  library(ggplot2)
+  library(shiny)
+  library(DT)
+  library(lubridate)
+  library(RColorBrewer)
+})
+
+# Load and process data
+Data <- read_excel("C:\\Users\\00760770\\Documents\\tidy_data.xlsx")
+Data <- Data %>%
+  filter(format(as.Date(date), "%Y") %in% 2018:2023)
+Data$year <- factor(year(Data$date))
+
+# Filter outliers
+Data$protein[which(Data$protein > 100)] <- NA
+Data$milk_per_cow[which(Data$milk_per_cow < 25)] <- NA
+Data$fat[which(Data$fat > 5)] <- NA
+
+# Set color palette
+mypal <- c(brewer.pal(7, "Set3"),
+           "#f9faeb", # accessible background
+           "#0A0A0A") # accessible font colour
+
+# Calculate summary statistics
+avg_milk_per_cow <- Data %>%
+  summarize(avg_milk_per_cow = mean(milk_per_cow, na.rm = TRUE)) %>%
+  pull(avg_milk_per_cow) %>% round(digits = 1)
+
+avg_protein <- Data %>%
+  summarize(avg_protein = mean(protein, na.rm = TRUE)) %>%
+  pull(avg_protein) %>% round(digits = 1)
+
+avg_fat <- Data %>%
+  summarize(avg_fat = round(mean(fat, na.rm = TRUE), 1)) %>%
+  pull(avg_fat)
+
+```
+
+# About
+
+::: card
+::: card-header
+**About the Project**
+:::
+
+::: card-body
+**This project aims to improve farm data accessibility by assessing usability and convenience.** The dairy production and milk quality data in this dashboard is from the Harper Adams Future Farm.
+
+<br>
+
+<center>![](https://github.com/RABBuffet/Dairy_Dashboard/blob/ca7fbd84efa75a3d5e0f3784d51ae0d93ac9cfc9/img/cow.webp){width="240" height="240"}</center>
+:::
+:::
+
+## column
+
+::: card
+::: card-header
+**Suggestions**
+:::
+
+::: card-body
+**Step 1:** Click on the **Dashboard tab** and examine each graph, focusing on the questions, use the sliders on the sidebar to adjust the graphs. (This should take about 2-3 minutes)
+
+**Step 2:** Click on the **Data tab** and examine the data and variable explanations. (This should take just 1 minute or so)
+
+**Step 3:** Help us answer a few **research questions** about your impressions of the data. (This should take just a few minutes)
+:::
+:::
+
+# Dashboard
+
+## Sidebar {.sidebar}
+
+```{r}
+#| label: sidebar-inputs
+sliderInput("year_range", "Select Year Range:",
+            min = min(as.numeric(as.character(Data$year))),
+            max = max(as.numeric(as.character(Data$year))),
+            value = c(min(as.numeric(as.character(Data$year))),
+                      max(as.numeric(as.character(Data$year)))),
+            step = 1,
+            sep = "")
+sliderInput("point_size", "Point Size:",
+                  min = 0.1, max = 5, value = 1, step = 0.1)
+      sliderInput("point_alpha", "Point Transparency:",
+                  min = 0, max = 1, value = 0.1, step = 0.05)
+      sliderInput("box_width", "Box Width:",
+                  min = 0.1, max = 1, value = 0.5, step = 0.1)
+checkboxInput("show_outliers", "Show Outliers", value = FALSE)
+```
+
+## Row
+
+### colomn {height="23%"}
+
+```{r}
+#| content: valuebox
+#| title: "Daily Milk (kg/cow/day)"
+
+list(
+  color = mypal[2],
+  value = avg_milk_per_cow
+)
+```
+
+```{r}
+#| content: valuebox
+#| title: "Protein (%)"
+#| options:
+#|   title.font.size: 30
+
+list(
+  color = mypal[3],
+  value = avg_protein
+)
+```
+
+```{r}
+#| component: valuebox
+#| title: "Fat (%)"
+
+list(
+  color = mypal[4],
+  value = avg_fat
+)
+```
+
+### Column
+
+```{r}
+#| title: "Is productivity improving in this herd?"
+plotOutput("milk_plot")
+```
+
+```{r}
+#| title: "Does variation in Protein % look fine?"
+plotOutput("protein_plot")
+```
+
+```{r}
+#| title: "Which years have large variation in Fat %?"
+plotOutput("fat_plot")
+```
+
+# Data
+
+### row
+
+[Download the data!](https://github.com/RABBuffet/Dairy_Dashboard/raw/main/data/tidy_data.xlsx)
+
+```{r}
+#| label: interactive-table
+
+# Create the interactive table
+datatable(
+  Data[,c("milk_produced", "milk_per_cow", "fat", "protein", "year")],
+  colnames = c("Milk Produced", "Milk per Cow", "Fat", "Protein", "Year"),
+  options = list(
+    dom = "Bfrtip",
+    paging = TRUE,
+    lengthMenu = c(10, 50, 100, 150, 200, 500, 1000, 1500),
+    pageLength = 10,
+    columnDefs = list(list(className = 'dt-center', targets = "_all")),
+    scrollY = FALSE
+  )
+)
+```
+
+```{r}
+#| label: server
+#| context: server
+
+# Reactive dataset
+filtered_data <- reactive({
+  Data %>%
+    filter(as.numeric(as.character(year)) >= input$year_range[1] &
+           as.numeric(as.character(year)) <= input$year_range[2])
+})
+
+# Inside your server function
+
+# Milk Production Plot
+output$milk_plot <- renderPlot({
+  ggplot(filtered_data(), aes(x = year, y = milk_per_cow)) +
+    geom_boxplot(fill = mypal[2], 
+                 outlier.shape = if(input$show_outliers) 16 else NA,
+                 width = input$box_width) +
+    geom_jitter(width = input$box_width * 0.4, 
+                alpha = input$point_alpha, 
+                size = input$point_size) +  
+    labs(x = "Year", y = "Daily Milk (kg/cow/day)") +  
+    theme_minimal() +
+    theme(
+      plot.background = element_rect(fill = mypal[8], color = NA), 
+      panel.background = element_rect(fill = mypal[8], color = NA), 
+      legend.position = "none",
+      axis.title = element_text(size = 14, color = mypal[9]), 
+      axis.text = element_text(size = 12, color = mypal[9]),  
+      axis.ticks = element_line(color = mypal[9])  
+    )
+})
+
+# Protein Content Plot
+output$protein_plot <- renderPlot({
+  ggplot(filtered_data(), aes(x = year, y = protein)) +
+    geom_boxplot(fill = mypal[3], 
+                 outlier.shape = if(input$show_outliers) 16 else NA,
+                 width = input$box_width) +
+    geom_jitter(width = input$box_width * 0.4, 
+                alpha = input$point_alpha, 
+                size = input$point_size) +  
+    labs(x = "Year", y = "Protein (%)") +  
+    theme_minimal() +
+    theme(
+      plot.background = element_rect(fill = mypal[8], color = NA), 
+      panel.background = element_rect(fill = mypal[8], color = NA), 
+      legend.position = "none",
+      axis.title = element_text(size = 14, color = mypal[9]), 
+      axis.text = element_text(size = 12, color = mypal[9]),  
+      axis.ticks = element_line(color = mypal[9])  
+    )
+})
+
+# Fat Content Plot
+output$fat_plot <- renderPlot({
+  ggplot(filtered_data(), aes(x = year, y = fat)) +
+    geom_boxplot(fill = mypal[4], 
+                 outlier.shape = if(input$show_outliers) 16 else NA,
+                 width = input$box_width) +
+    geom_jitter(width = input$box_width * 0.4, 
+                alpha = input$point_alpha, 
+                size = input$point_size) +  
+    labs(x = "Year", y = "Fat (%)") +  
+    theme_minimal() +
+    theme(
+      plot.background = element_rect(fill = mypal[8], color = NA), 
+      panel.background = element_rect(fill = mypal[8], color = NA), 
+      legend.position = "none",
+      axis.title = element_text(size = 14, color = mypal[9]), 
+      axis.text = element_text(size = 12, color = mypal[9]),  
+      axis.ticks = element_line(color = mypal[9])  
+    )
+})
+```

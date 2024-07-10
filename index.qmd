@@ -1,0 +1,115 @@
+---
+title: "Curriculum Vitae"
+author: "K.J. Mhango"
+format: dashboard
+editor: visual
+orientation: columns
+include-before-body: 
+  text: |
+    <style>
+      #quarto-dashboard-header {
+        display: none
+      }
+    </style>
+---
+<style>
+  .highlight {
+    background-color: grey;
+    color: white;
+    padding: 0.2em;
+    border-radius: 4px;
+  }
+  
+  .maintitle {
+    color: black;
+    border-radius: 4px;
+    margin:auto;
+  }
+
+</style>
+
+
+## sidebar {width=30%}
+
+![](mhango.jpg)
+
+***Name:*** Kanthu Joseph Mhango, PhD\
+***Mobile Number:*** +447432629843 \
+***Email Address:*** jmhango\@harper-adams.ac.uk\
+[<img src="linkedin.png" alt="LinkedIn" style="width:50px;height:50px;">](https://www.linkedin.com/in/joseph-mhango-88702a2b/)
+[<img src="x.png" alt="Twitter" style="width:80px;height:60px;">](https://x.com/josemhango)
+[<img src="researchgate.png" alt="ResearchGate" style="width:50px;height:50px;">](https://www.researchgate.net/profile/Joseph-Mhango-2)
+[<img src="orcid.png" alt="ORCID" style="width:50px;height:50px;">](https://orcid.org/0000-0002-8488-7942)
+
+## Main Window {width=70%}
+
+<h3 class="maintitle">CURRICULUM VITAE</h3>
+
+<h3 class="highlight">Tertiary Education Background</h3>
+
+-   ***PhD: Applied Remote Sensing and Agri-informatics***, Harper Adams University (February 2022)
+
+-   ***MSc in Soil Science, Egerton University***, Kenya -- (June 2015)
+
+-   ***BSc in Agronomy***, University of Malawi -- (May 2010)
+
+<h3 class="highlight">Key Work Experience</h3>
+
+<h4>Solynta -- WAGENINGEN, The Netherlands</h4>
+
+***Digital Phenotyping Specialist (April, 22 -- June 2024)***
+
+-   Technical lead of potato digital phenotyping
+-   Software development project design and management
+-   Provide overall direction to the company's phenotyping strategic plan
+
+<h4>Crop4Sight Ltd -- PETERBOROUGH, United Kingdom</h4>
+
+***Data Scientist (April, 21 -- April, 23)***
+
+-   Lead developer of machine learning models based on proximal and remotely sensed data for precision potato production
+
+-   Formulation and validation of mechanistic potato growth simulation models for yield prediction
+
+<h4>Harper Adams University -- SHROPSHIRE, United Kingdom</h4>
+
+***Research student and assistant (April, 19 -- 2021)***
+
+-   Spectral analysis, developing custom vegetation indices, image segmentation models and object detection models from canopy images to predict potato stem density
+-   Geospatial data analysis
+-   Experimental design, trial implementation, report writing and publication
+
+<h4>International Institute of Tropical Agriculture (IITA) -- LILONGWE, Malawi</h4>
+
+***Research Associate (December, 17 -- October 2018)***
+
+-   Point of contact for high throughput phenotyping projects
+-   Management of IITA Malawi's Cassava Breeding Scheme
+
+***Technology Dissemination Specialist (Nov, 15 -- Nov, 17)***
+
+-   Implementing a USAID-funded upscaling project for disseminating improved soybean genotypes
+
+***Non-Resident Research Fellow (August, 12 -- August, 14)***
+
+-   Spatial analysis, Bioprospecting and phenotyping indigenous Bradyrhizobia for nitrogen fixation
+
+***Research Supervisor (September, 10 to April, 12)***
+
+-   Malawi's trials agronomist for a BMGF-funded N2Africa project
+
+<h3 class="highlight">Other Short-term Assignments</h3>
+
+-   ***Lilongwe University of Agriculture and Natural Resources:*** Adjunct Lecturer in Country-level Agricultural Production Estimation (Sept 2015 -- Oct 2015)\
+-   ***Rural Market Development Trust (RUMARK):*** Project Coordinator of the USAID SAIOMA project (October 2013 to Nov 2014)\
+-   ***Seed Trade Association of Malawi (STAM):*** Seed Systems Specialist (May 2012 to Sep 2012)
+
+<h3 class="highlight">Key Peer-Reviewed Publications</h3>
+
+  Mhango, J.K., W. Harris, E., and Monaghan, J.M. ***(2022)***. Relationships between the Spatio-Temporal Variation in Reflectance Data from the Sentinel-2 Satellite and Potato (*Solanum tuberosum L.*) Yield and Stem Density. Remote Sensing 13(21). https://doi.org/10.3390/rs13214371 
+
+  Mhango, J.K., Grove, I.G., Hartley, W. Harris, E., and Monaghan, J.M. ***(2022)***. Applying colour-based feature extraction and transfer learning to develop a high throughput inference system for potato (*Solanum tuberosum L.*) stems with images from unmanned aerial vehicles after canopy consolidation. Precision Agric. https://doi.org/10.1007/s11119-021-09853-4 
+
+  Mhango, J.K., W. Harris, E., Green, R., and Monaghan, J.M. Monaghan ***(2021)***. Mapping Potato Plant Density Variation Using Aerial Imagery and Deep Learning Techniques for Precision Agriculture. Remote Sensing 13(14). https://doi.org/10.3390/rs13142705 
+
+Mhango, J.K., W. Harris, E., and Monaghan, J.M. ***(2022)***. Comparison of potato (*Solanum tuberosum L.*) tuber size distribution fitting methods and evaluation of the relationship between soil properties and estimated distribution parameters. The Journal of Agricultural Science, 1-15. https://doi.org/10.1017/S0021859621000952
